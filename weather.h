@@ -11,11 +11,11 @@ struct WeatherInfo{
 };
 class Weather{
     public:
-    Weather(string& apiKey);
-    WeatherInfo getWeather(string& city);
-
+    Weather(const string& apiKey);
+    WeatherInfo getWeather(const string& city);
+private:
     string apiKey;
-    string fetchWeatherData(string& city);
+    string fetchWeatherData(const string& city);
 
 };
 
