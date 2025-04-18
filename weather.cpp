@@ -1,9 +1,15 @@
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#undef byte
 #include "weather.h"
-#include "json.hpp" // For JSON parsing
-#include <curl/curl.h>  // For HTTP requests
+#include "json.hpp" // For JSON parsin
+#include <curl/curl.h> // For HTTP requests
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#undef byte
 using namespace std;
 using json=nlohmann::json;
 
@@ -48,9 +54,9 @@ WeatherInfo Weather::getWeather(const  string& city){
     json j= json::parse(data);
 
     WeatherInfo info;
-    info.city=j["NAme"];
+    info.city=j["name"];
     info.temperature=j["main"]["temp"];
     info.humidity=j["main"]["humidity"];
-    info.description=j["main"][0]["description"];
+    info.description=j["weather"][0]["description"];
     return info;
 }
