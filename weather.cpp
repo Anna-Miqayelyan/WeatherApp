@@ -1,20 +1,23 @@
 #include "weather.h"
 #include "json.hpp" // For JSON parsing
-#include <curl/curl.h>  // For HTTP requests
+#include "C:/curl/include/curl/curl.h"// For HTTP requests
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 using namespace std;
+
 using json=nlohmann::json;
 
-Weather::Weather(const  string& apiKey) : apiKey(apiKey){}
 
-size_t WriteCallback(void* contents, size_t size,size_t nmemb, string* output){
-    size_t totalSize=size*nmemb;
-
-    output->append((char*)contents,totalSize);
-    return totalSize;
+namespace {  
+    size_t WriteCallback(char* ptr, size_t size, size_t nmemb, std::string* data) {
+        data->append(ptr, size * nmemb);
+        return size * nmemb;
+    }
 }
+
+
+Weather::Weather(const  string& apiKey) : apiKey(apiKey){}
 
 string Weather::fetchWeatherData( const string& city){
     CURL* curl;
@@ -48,9 +51,9 @@ WeatherInfo Weather::getWeather(const  string& city){
     json j= json::parse(data);
 
     WeatherInfo info;
-    info.city=j["NAme"];
+    info.city=j["name"];
     info.temperature=j["main"]["temp"];
     info.humidity=j["main"]["humidity"];
-    info.description=j["main"][0]["description"];
+    info.description=j["weather"][0]["description"];
     return info;
 }
